@@ -21,11 +21,79 @@ namespace Tasks
             //WaitAll();
             //WaitAny();
 
-            Task.Run(() => Sequential());
-           
+            //Task.Run(() => Sequential());
+            //Task.Run(() => AwaitOnCancelledTask());
+            //Task.Run(() => ConcurrentAsync());
+            Task.Run(() => ConcurrentFirstAsync());
+            //Task.Run(() => WhenAny());
+
             Console.ReadKey();
         }
 
+        private static async Task WhenAny()
+        {
+            var t1 = Task.CompletedTask;
+            var t2 = Task.CompletedTask;
+            var finished = Task.WhenAll(t1, t2);
+            await finished; //even if void tasks, await will check if exception is thrown  
+        }
+
+        static async Task ConcurrentAsync()
+        {
+            var tasks = Enumerable.Range(0, 3).Select(i =>
+            {
+                Debug($"Started {i}");
+                var task = Task.Delay(1000);
+                Debug($"Finished {i}");
+                return task;
+            });
+
+            await Task.WhenAll(tasks);
+            Debug("Done");
+        }
+        static async Task ConcurrentFirstAsync()
+        {
+            var cts = new CancellationTokenSource(2000);
+            var tasks = Enumerable.Range(0, 3).Select(async i =>
+            {
+                Debug($"Started {i}");
+                await Task.Delay((i+1)*1000, cts.Token);
+                Debug($"Finished {i}");
+                return i;
+            });
+
+
+            //pro tip: will work \/
+            //var index = await await Task.WhenAny(tasks);
+
+            var finished = await Task.WhenAny(tasks);
+            cts.Cancel();
+
+            var index = await finished;
+
+            Debug($"Finished i={index}");
+            Debug("Done");
+        }
+
+        private static void Debug<T>(T arg) =>
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] {arg}");
+
+        static async Task<int> DelaySecondsAndReturnAsync(int seconds, CancellationToken token)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+            return seconds;
+        }
+        static async Task AwaitOnCancelledTask()
+        {
+            Debug("Start");
+            var cts = new CancellationTokenSource(2000);
+            var task = DelaySecondsAndReturnAsync(4, cts.Token);
+            Thread.Sleep(1000);
+            //cts.Cancel();
+            var result = await task;  // Throws in case of cancellation both from timeout or manual Cancel
+            Debug($"Done. Cancelled: {task.IsCanceled}");
+            Debug($"Result: {result}");
+        }
         static async Task Sequential()
         {
             var tasks = Enumerable.Range(0, 3).Select(i =>
@@ -132,5 +200,7 @@ namespace Tasks
 
             return result;
         }
+
+
     }
 }
