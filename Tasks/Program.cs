@@ -24,17 +24,44 @@ namespace Tasks
             //Task.Run(() => Sequential());
             //Task.Run(() => AwaitOnCancelledTask());
             //Task.Run(() => ConcurrentAsync());
-            Task.Run(() => ConcurrentFirstAsync());
+            //Task.Run(() => ConcurrentFirstAsync());
             //Task.Run(() => WhenAny());
 
+            //Task.Run(() => TimeoutExtensionTest());
+
+
+
             Console.ReadKey();
+        }
+
+        private static async Task TimeoutExtensionTest()
+        {
+            //won't throw exception
+            var task = Task.Run(() => { Console.WriteLine("Done"); }).TimeoutAfter(100);
+            await task;
+            //will throw exception but task will execute as well
+
+            try
+            {
+                var exceptionTask = Task.Run(() =>
+                {
+                    Thread.Sleep(500);
+                    Console.WriteLine("Done!");
+                }).TimeoutAfter(10);
+
+                await exceptionTask;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Test method exception {ex.Message}");
+            }
         }
 
         private static async Task WhenAny()
         {
             var t1 = Task.CompletedTask;
             var t2 = Task.CompletedTask;
-            var finished = Task.WhenAll(t1, t2);
+            var finished = Task.WhenAny(t1, t2);
             await finished; //even if void tasks, await will check if exception is thrown  
         }
 
@@ -200,7 +227,5 @@ namespace Tasks
 
             return result;
         }
-
-
     }
 }
