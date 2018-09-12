@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks.Core", "Tasks.Core\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "WinForms\WinForms.csproj", "{DE4E2CD9-0DC1-409F-B80E-A0CB85F39AA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadLocalStorage", "ThreadLocalStorage\ThreadLocalStorage.csproj", "{1EE053E2-FA34-4BDC-BA04-F772564BA6AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{DE4E2CD9-0DC1-409F-B80E-A0CB85F39AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE4E2CD9-0DC1-409F-B80E-A0CB85F39AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE4E2CD9-0DC1-409F-B80E-A0CB85F39AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EE053E2-FA34-4BDC-BA04-F772564BA6AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EE053E2-FA34-4BDC-BA04-F772564BA6AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EE053E2-FA34-4BDC-BA04-F772564BA6AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EE053E2-FA34-4BDC-BA04-F772564BA6AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

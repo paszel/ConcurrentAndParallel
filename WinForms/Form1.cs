@@ -18,9 +18,10 @@ namespace WinForms
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             var jsonTask = GetJsonAsync(new Uri("https://postman-echo.com/get"));
+
             textBox1.Text = jsonTask.Result.ToString();
         }
 
